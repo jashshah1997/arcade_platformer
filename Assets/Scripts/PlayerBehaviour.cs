@@ -7,6 +7,7 @@
  * Revision History:
  *  - 26/09/2021 - Add a basic gameplay scene with player character
  *  - 26/09/2021 - Add Player life system
+ *  - 26/09/2021 - Add a scoring systm
  */
 
 using System.Collections;
@@ -39,6 +40,7 @@ public class PlayerBehaviour : MonoBehaviour
     public float horizontalForce;
     public float verticalForce;
     public int lifeCount;
+    public int score;
 
     [Header("Platform Detection")]
     public bool isGrounded;
@@ -50,7 +52,6 @@ public class PlayerBehaviour : MonoBehaviour
     public LayerMask collisionWallLayer;
     public RampDirection rampDirection;
     public bool onRamp;
-    public Text victoryText;
     public Transform respawnPoint;
     public Transform finishPoint;
 
@@ -63,6 +64,7 @@ public class PlayerBehaviour : MonoBehaviour
     
     private GameObject m_life_object;
     private List<GameObject> m_lifePool;
+    public GameObject gameOver;
 
     // Start is called before the first frame update
     void Start()
@@ -71,8 +73,12 @@ public class PlayerBehaviour : MonoBehaviour
         m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_animator = GetComponent<Animator>();
         m_clicked_position = gameObject.transform.position.x;
-        victoryText.enabled = false;
         Time.timeScale = 1;
+
+        if (gameOver)
+        {
+            gameOver.SetActive(false);
+        }
 
         // Instantiate heart sprites
         m_life_object = Resources.Load("Prefabs/Life") as GameObject;
@@ -97,7 +103,6 @@ public class PlayerBehaviour : MonoBehaviour
         if (Mathf.Sqrt(Mathf.Pow(gameObject.transform.position.x - finishPoint.transform.position.x, 2) + 
             Mathf.Pow(gameObject.transform.position.y - finishPoint.transform.position.y, 2)) < 1)
         {
-            victoryText.enabled = true;
             Time.timeScale = 0;
         }
 
@@ -262,13 +267,28 @@ public class PlayerBehaviour : MonoBehaviour
         {
             if (m_lifePool.Count > 0)
             {
+                lifeCount--;
                 m_lifePool[m_lifePool.Count - 1].SetActive(false);
                 Destroy(m_lifePool[m_lifePool.Count - 1], 0.5f);
                 m_lifePool.RemoveAt(m_lifePool.Count - 1);
+            } else
+            {
+                if (gameOver)
+                {
+                    gameOver.SetActive(true);
+                    Time.timeScale = 0;
+                }
             }
             gameObject.transform.position = respawnPoint.transform.position;
             isJumping = true;
             m_rigidBody2D.velocity = Vector2.zero;
+        }
+
+        if (other.tag == "Diamond")
+        {
+            score += 10;
+            other.gameObject.SetActive(false);
+            Destroy(other.gameObject);
         }
     }
 }

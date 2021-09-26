@@ -8,6 +8,8 @@ TagManager:
   - Platforms
   - MainMenu
   - InstructionScreen
+  - Diamond
+  - GameOver
   layers:
   - Default
   - TransparentFX

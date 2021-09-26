@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 4014018533841984856}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,6 +149,7 @@ MonoBehaviour:
   horizontalForce: 500
   verticalForce: 500
   lifeCount: 3
+  score: 0
   isGrounded: 0
   isJumping: 0
   isCrouching: 0

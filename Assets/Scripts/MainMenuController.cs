@@ -7,6 +7,7 @@
  * Revision History:
  *  - 25/09/2021 - Add Initial Main Menu functions
  *  - 26/09/2021 - Add instruction screen functionality
+ *  - 26/09/2021 - Add Gamplay screen menu functionality
  */
 
 using System.Collections;
@@ -25,7 +26,11 @@ public class MainMenuController : MonoBehaviour
         m_instruction_screen = GameObject.FindGameObjectWithTag("InstructionScreen");
         
         m_main_menu.SetActive(true);
-        m_instruction_screen.SetActive(false);
+
+        if (m_instruction_screen)
+        {
+            m_instruction_screen.SetActive(false);
+        }
     }
 
     public void OnStartButton()
