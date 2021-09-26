@@ -6,6 +6,7 @@
  * Program Description: Controls the Player Character
  * Revision History:
  *  - 26/09/2021 - Add a basic gameplay scene with player character
+ *  - 26/09/2021 - Add Player life system
  */
 
 using System.Collections;
@@ -37,6 +38,7 @@ public class PlayerBehaviour : MonoBehaviour
     [Header("Controls")]
     public float horizontalForce;
     public float verticalForce;
+    public int lifeCount;
 
     [Header("Platform Detection")]
     public bool isGrounded;
@@ -58,6 +60,9 @@ public class PlayerBehaviour : MonoBehaviour
     private RaycastHit2D groundHit;
 
     private float m_clicked_position = 0f;
+    
+    private GameObject m_life_object;
+    private List<GameObject> m_lifePool;
 
     // Start is called before the first frame update
     void Start()
@@ -68,6 +73,16 @@ public class PlayerBehaviour : MonoBehaviour
         m_clicked_position = gameObject.transform.position.x;
         victoryText.enabled = false;
         Time.timeScale = 1;
+
+        // Instantiate heart sprites
+        m_life_object = Resources.Load("Prefabs/Life") as GameObject;
+        m_lifePool = new List<GameObject>();
+        for (int i = 0; i < lifeCount; i++)
+        {
+            var life = MonoBehaviour.Instantiate(m_life_object);
+            life.transform.position = life.transform.position + i * life.GetComponent<SpriteRenderer>().bounds.size.y * Vector3.right;
+            m_lifePool.Add(life);
+        }
     }
 
     void Update()
@@ -245,6 +260,12 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if (other.tag == "Fire")
         {
+            if (m_lifePool.Count > 0)
+            {
+                m_lifePool[m_lifePool.Count - 1].SetActive(false);
+                Destroy(m_lifePool[m_lifePool.Count - 1], 0.5f);
+                m_lifePool.RemoveAt(m_lifePool.Count - 1);
+            }
             gameObject.transform.position = respawnPoint.transform.position;
             isJumping = true;
             m_rigidBody2D.velocity = Vector2.zero;

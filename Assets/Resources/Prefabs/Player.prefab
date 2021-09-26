@@ -148,6 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   horizontalForce: 500
   verticalForce: 500
+  lifeCount: 3
   isGrounded: 0
   isJumping: 0
   isCrouching: 0
