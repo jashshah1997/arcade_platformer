@@ -105,6 +105,7 @@ public class PlayerBehaviour : MonoBehaviour
             Mathf.Pow(gameObject.transform.position.y - finishPoint.transform.position.y, 2)) < 1)
         {
             Time.timeScale = 0;
+            gameOver.SetActive(true);
         }
 
         if (Input.GetKey(KeyCode.Escape))
