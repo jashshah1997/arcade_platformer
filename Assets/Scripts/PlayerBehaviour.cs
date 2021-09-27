@@ -7,7 +7,8 @@
  * Revision History:
  *  - 26/09/2021 - Add a basic gameplay scene with player character
  *  - 26/09/2021 - Add Player life system
- *  - 26/09/2021 - Add a scoring systm
+ *  - 26/09/2021 - Add a scoring system
+ *  - 27/09/2021 - Add sound when collecting diamonds
  */
 
 using System.Collections;
@@ -287,6 +288,7 @@ public class PlayerBehaviour : MonoBehaviour
         if (other.tag == "Diamond")
         {
             score += 10;
+            gameObject.GetComponent<AudioSource>().Play();
             other.gameObject.SetActive(false);
             Destroy(other.gameObject);
         }
