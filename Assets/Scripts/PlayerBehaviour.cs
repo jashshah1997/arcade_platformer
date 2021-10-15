@@ -122,6 +122,7 @@ public class PlayerBehaviour : MonoBehaviour
         {
             if (SceneManager.GetActiveScene().name == "GameplayScene")
             {
+                PlayerScore.SCORE = score;
                 SceneManager.LoadScene("LevelTwo");
             }
             else
