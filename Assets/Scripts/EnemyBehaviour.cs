@@ -34,7 +34,11 @@ public class EnemyBehaviour : MonoBehaviour
         {
             walkSpeed *= -1;
             transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x + walkSpeed / Mathf.Abs(walkSpeed) * Time.fixedDeltaTime,
+            gameObject.transform.position.y,
+            gameObject.transform.position.z);
         }
+        
         rb.velocity = new Vector2(walkSpeed * Time.fixedDeltaTime, rb.velocity.y);
     }
 }

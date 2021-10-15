@@ -11,6 +11,7 @@ TagManager:
   - Diamond
   - GameOver
   - Enemy
+  - Chest
   layers:
   - Default
   - TransparentFX

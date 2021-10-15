@@ -9,7 +9,9 @@
  *  - 26/09/2021 - Add Player life system
  *  - 26/09/2021 - Add a scoring system
  *  - 27/09/2021 - Add sound when collecting diamonds
- *  - 15/10/1021 - Add transition to Level Two
+ *  - 15/10/2021 - Add transition to Level Two
+ *  - 15/10/2021 - Transfer player score to next level
+ *  - 15/10/2021 - Add enemy interactions
  */
 
 using System.Collections;
@@ -19,6 +21,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEngine.UI;
+
+public static class PlayerScore
+{
+    public static int SCORE = 0;
+}
 
 [System.Serializable]
 public enum PlayerAnimationType
@@ -71,6 +78,14 @@ public class PlayerBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (SceneManager.GetActiveScene().name == "GameplayScene")
+        {
+            PlayerScore.SCORE = 0;
+        }  else
+        {
+            score = PlayerScore.SCORE;
+        }
+
         m_rigidBody2D = GetComponent<Rigidbody2D>();
         m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_animator = GetComponent<Animator>();
@@ -278,6 +293,7 @@ public class PlayerBehaviour : MonoBehaviour
             // Check which Center is higher
             if (gameObject.transform.position.y > other.transform.position.y + 0.5)
             {
+                score += 20;
                 other.gameObject.SetActive(false);
                 Destroy(other.gameObject);
             } else
@@ -316,6 +332,15 @@ public class PlayerBehaviour : MonoBehaviour
         if (other.tag == "Diamond")
         {
             score += 10;
+            gameObject.GetComponent<AudioSource>().Play();
+            other.gameObject.SetActive(false);
+            Destroy(other.gameObject);
+        }
+
+
+        if (other.tag == "Chest")
+        {
+            score += 50;
             gameObject.GetComponent<AudioSource>().Play();
             other.gameObject.SetActive(false);
             Destroy(other.gameObject);
