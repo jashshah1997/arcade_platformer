@@ -2,13 +2,14 @@
  * Filename:            PlayerBehaviour.cs
  * Student Name:        Jash Shah
  * Student ID:          101274212
- * Date last modified:  26/09/2021
+ * Date last modified:  15/10/2021
  * Program Description: Controls the Player Character
  * Revision History:
  *  - 26/09/2021 - Add a basic gameplay scene with player character
  *  - 26/09/2021 - Add Player life system
  *  - 26/09/2021 - Add a scoring system
  *  - 27/09/2021 - Add sound when collecting diamonds
+ *  - 15/10/1021 - Add transition to Level Two
  */
 
 using System.Collections;
@@ -104,8 +105,15 @@ public class PlayerBehaviour : MonoBehaviour
         if (Mathf.Sqrt(Mathf.Pow(gameObject.transform.position.x - finishPoint.transform.position.x, 2) + 
             Mathf.Pow(gameObject.transform.position.y - finishPoint.transform.position.y, 2)) < 1)
         {
-            Time.timeScale = 0;
-            gameOver.SetActive(true);
+            if (SceneManager.GetActiveScene().name == "GameplayScene")
+            {
+                SceneManager.LoadScene("LevelTwo");
+            }
+            else
+            {
+                Time.timeScale = 0;
+                gameOver.SetActive(true);
+            }
         }
 
         if (Input.GetKey(KeyCode.Escape))
@@ -265,6 +273,25 @@ public class PlayerBehaviour : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.tag == "Enemy")
+        {
+            // Check which Center is higher
+            if (gameObject.transform.position.y > other.transform.position.y + 0.5)
+            {
+                other.gameObject.SetActive(false);
+                Destroy(other.gameObject);
+            } else
+            {
+                lifeCount--;
+                m_lifePool[m_lifePool.Count - 1].SetActive(false);
+                Destroy(m_lifePool[m_lifePool.Count - 1], 0.5f);
+                m_lifePool.RemoveAt(m_lifePool.Count - 1);
+                gameObject.transform.position = respawnPoint.transform.position;
+                isJumping = true;
+                m_rigidBody2D.velocity = Vector2.zero;
+            }
+        }
+
         if (other.tag == "Fire")
         {
             if (m_lifePool.Count > 0)

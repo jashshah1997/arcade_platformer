@@ -10,6 +10,7 @@ TagManager:
   - InstructionScreen
   - Diamond
   - GameOver
+  - Enemy
   layers:
   - Default
   - TransparentFX
